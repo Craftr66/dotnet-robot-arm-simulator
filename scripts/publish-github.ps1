@@ -1,4 +1,4 @@
-﻿param([string]$Owner = 'Craftr66', [string]$Repository = 'dotnet-robot-arm-simulator')
+﻿param([string]$Owner = 'Craftr66', [string]$Repository = 'dotnet-robot-arm-simulator', [switch]$StatusOnly)
 $ErrorActionPreference = 'Stop'
 if ($Owner -notmatch '^[A-Za-z0-9-]+$' -or $Repository -notmatch '^[A-Za-z0-9_.-]+$') { throw 'Invalid GitHub repository identity.' }
 Push-Location (Split-Path $PSScriptRoot -Parent)
@@ -15,6 +15,25 @@ try {
     $account = Invoke-RestMethod -Uri 'https://api.github.com/user' -Headers $headers
     if ($account.login -ne $Owner) { throw 'Authenticated GitHub account differs from the requested repository owner.' }
     $repositoryUri = "https://api.github.com/repos/$Owner/$Repository"
+    if ($StatusOnly) {
+        $runs = Invoke-RestMethod -Uri ($repositoryUri + '/actions/runs?per_page=1') -Headers $headers
+        foreach ($run in $runs.workflow_runs) {
+            Write-Host "Run $($run.id): $($run.status) / $($run.conclusion) - $($run.html_url)"
+            $jobs = Invoke-RestMethod -Uri $run.jobs_url -Headers $headers
+            foreach ($job in $jobs.jobs) {
+                Write-Host "Job $($job.name): $($job.status) / $($job.conclusion)"
+                foreach ($step in $job.steps) { if ($step.conclusion -eq 'failure') { Write-Host "Failed step: $($step.name)" } }
+                if ($job.conclusion -eq 'failure') {
+                    $logDirectory = Join-Path $PWD 'artifacts\github-checks'
+                    New-Item -ItemType Directory -Path $logDirectory -Force | Out-Null
+                    $logFile = Join-Path $logDirectory ($job.id.ToString() + '.log')
+                    Invoke-WebRequest -Uri ($repositoryUri + '/actions/jobs/' + $job.id + '/logs') -Headers $headers -OutFile $logFile -UseBasicParsing
+                    Select-String -LiteralPath $logFile -Pattern 'error|FAIL|Unhandled|Exception' | Select-Object -Last 15 | ForEach-Object { Write-Host $_.Line }
+                }
+            }
+        }
+        return
+    }
     $existing = $null
     try { $existing = Invoke-RestMethod -Uri $repositoryUri -Headers $headers }
     catch { if (!$_.Exception.Response -or [int]$_.Exception.Response.StatusCode -ne 404) { throw 'Could not inspect the target GitHub repository.' } }

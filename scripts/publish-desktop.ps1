@@ -23,6 +23,7 @@ try {
     Copy-Item -LiteralPath docs\运动与示教使用说明.md,docs\运动与示教接口.md,docs\阶段5验收记录.md -Destination $output -Force
     Copy-Item -LiteralPath docs\积木编程使用说明.md,docs\积木程序接口.md,docs\阶段6验收记录.md,docs\桌面版验收记录.md -Destination $output -Force
     Copy-Item -LiteralPath docs\VM九点标定与WPF集成教程.md,docs\阶段7B验收记录.md -Destination $output -Force
+    Copy-Item -LiteralPath docs\images -Destination $output -Recurse -Force
     Get-ChildItem -LiteralPath docs -Filter '桌面版0.*验收记录.md' -File | Copy-Item -Destination $output -Force
     $licenses = Join-Path $output 'Licenses'
     New-Item -ItemType Directory -Path $licenses -Force | Out-Null

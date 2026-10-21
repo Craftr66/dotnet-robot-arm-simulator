@@ -32,6 +32,10 @@
 
 ## 3. 在 VM 中测量圆心
 
+新版 WPF 的采样页如下；右侧内容较长时向下滚动，表格右侧可横向滚动查看状态。
+
+![WPF 九点采样页](images/wpf-nine-point.png)
+
 1. 在 VM 新建方案和流程，加入“图像源”，选择本地图像，先打开 `p01-...png`。
 2. 首次建议使用灰度图，再添加“圆查找”或适合该版本的精定位模块。对黑圆设置 ROI，识别白到黑的边缘，使结果恰好得到一个圆心。
 3. 对 1—9 的九张照片依次运行，记录每一张的圆心 X/Y（像素）。若 ROI 过小，移动后的圆会跑出范围；可扩大 ROI 或先粗定位再精定位。
@@ -128,3 +132,5 @@ VM 支持导入它自己的 TXT 点集格式；本项目 `points.csv` 是通用�
 本教程的 VM 参数含义依据本机 4.3.0 安装目录中的 `Applications/Help/CH`：N点标定、标定转换、输入输出配置，以及 `Development/V4.x/Includes/IVmNPointCalib.h`。不同版本布局可能变化，以本机帮助为准。
 
 厂商功能概览：[VisionMaster 官方页面](https://www.hikrobotics.com/cn/machinevision/visionmaster/)。模块结果说明：[官方标定帮助](https://pinfo.hikrobotics.com/hkws/unzip/20231101163730_26101_doc/GUID-325D816D-75BC-462B-857E-D49727A2388C.html)。
+
+本机额外检查已记录厂商依赖 DLL 与新桌面 EXE 被 Windows Code Integrity 策略阻止；详见[本轮验收记录](阶段7B验收记录.md)。这部分需要在受信任、获授权的运行环境中解决，教程未修改本机安全策略。

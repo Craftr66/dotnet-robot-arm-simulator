@@ -19,6 +19,7 @@ try {
     New-Item -ItemType Directory -Path (Join-Path $frameworkOutput 'Samples') -Force | Out-Null
     Copy-Item -LiteralPath samples\vm-bridge.scene.json,samples\nine-point-calibration.scene.json -Destination (Join-Path $frameworkOutput 'Samples') -Force
     Copy-Item -LiteralPath docs\VM九点标定与WPF集成教程.md,docs\阶段7B验收记录.md -Destination $frameworkOutput -Force
+    Copy-Item -LiteralPath docs\images -Destination $frameworkOutput -Recurse -Force
     $frameworkSourceRoot = (Resolve-Path -LiteralPath src/WpfDemo).Path
     foreach ($frameworkFile in (Get-ChildItem -LiteralPath $frameworkSourceRoot -Recurse -File)) {
         $frameworkRelative = $frameworkFile.FullName.Substring($frameworkSourceRoot.Length + 1)
