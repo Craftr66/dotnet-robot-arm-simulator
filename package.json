@@ -1,0 +1,23 @@
+{
+  "name": "axislab-simulator",
+  "private": true,
+  "version": "0.7.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p src/Frontend/tsconfig.json",
+    "test:ui": "node scripts/ui-checks.mjs",
+    "test:camera": "node scripts/camera-checks.mjs",
+    "start": "dotnet run --project src/Host/AxisLab.Host.csproj --no-launch-profile"
+  },
+  "dependencies": {
+    "blockly": "13.4.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.180.0",
+    "esbuild": "0.25.11",
+    "playwright": "1.62.1",
+    "typescript": "5.9.3"
+  }
+}

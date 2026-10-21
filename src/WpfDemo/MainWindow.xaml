@@ -1,0 +1,326 @@
+<Window x:Class="AxisLab.WpfDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AxisLab 上位机 Demo · VisionMaster / Modbus TCP / HTTP"
+        Width="1360" Height="900" MinWidth="1180" MinHeight="760"
+        WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="164"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 顶部连接栏 -->
+        <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1" Padding="18,11">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="AxisLab" FontSize="22" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                    <TextBlock Text="上位机 Demo" FontSize="16" FontWeight="SemiBold" Margin="7,0,0,1" VerticalAlignment="Bottom"/>
+                    <TextBlock Text="Modbus TCP + HTTP" Style="{StaticResource CaptionStyle}" Margin="10,0,0,3" VerticalAlignment="Bottom"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="AxisLab 地址" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                    <TextBox x:Name="AddressBox" Width="268" Text="http://127.0.0.1:5080"/>
+                    <Button x:Name="AutoDetectButton" Content="自动检测" Style="{StaticResource SecondaryButtonStyle}" Margin="7,0,0,0" Click="AutoDetect_Click"/>
+                    <Button x:Name="ConnectButton" Content="连接" Style="{StaticResource BaseButtonStyle}" Margin="7,0,0,0" Click="Connect_Click"/>
+                    <Button x:Name="DisconnectButton" Content="断开" Style="{StaticResource SecondaryButtonStyle}" Margin="7,0,0,0" Click="Disconnect_Click" IsEnabled="False"/>
+                    <Ellipse x:Name="ConnectionDot" Width="9" Height="9" Fill="#9CA3AF" Margin="14,0,7,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="ConnectionText" Text="未连接" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 主工作区 -->
+        <Grid Grid.Row="1" Margin="16,14,16,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="336"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="408"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 工程与设备 -->
+            <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="当前工程" Style="{StaticResource SectionTitleStyle}"/>
+                        <TextBlock x:Name="ProjectNameText" Text="未连接" FontSize="17" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="ProjectMetaText" Text="连接后显示工程会话、版本和设备数量" Style="{StaticResource CaptionStyle}" Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,13,0,0">
+                        <TextBlock Text="已保存工程" Style="{StaticResource CaptionStyle}"/>
+                        <ComboBox x:Name="ProjectCombo" DisplayMemberPath="Name" Margin="0,4,0,0"/>
+                        <Button x:Name="OpenProjectButton" Content="打开所选工程" Style="{StaticResource BaseButtonStyle}" Margin="0,6,0,0" Click="OpenProject_Click" IsEnabled="False"/>
+                        <Grid Margin="0,7,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="RefreshButton" Content="刷新当前工程" Style="{StaticResource SecondaryButtonStyle}" Click="Refresh_Click" IsEnabled="False"/>
+                            <Button Grid.Column="2" x:Name="ImportButton" Content="导入 JSON..." Style="{StaticResource SecondaryButtonStyle}" Click="Import_Click" IsEnabled="False"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="2" x:Name="DeviceCountText" Text="工程设备" Style="{StaticResource SectionTitleStyle}" Margin="0,17,0,4"/>
+
+                    <ListView Grid.Row="3" x:Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="#" Width="38" DisplayMemberBinding="{Binding NumberText}"/>
+                                <GridViewColumn Header="名称" Width="128" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="类型" Width="84" DisplayMemberBinding="{Binding TypeName}"/>
+                                <GridViewColumn Header="轴" Width="34" DisplayMemberBinding="{Binding AxisText}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <TextBlock Grid.Row="4" Text="设备编号来自工程，不随重命名变化。选择机器人后可接管控制；选择相机后可拍照。"
+                               Style="{StaticResource CaptionStyle}" Margin="0,8,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- 机器人控制 -->
+            <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="机器人控制" Style="{StaticResource SectionTitleStyle}"/>
+                            <TextBlock Grid.Column="1" x:Name="RobotTitleText" Text="未选择机器人" Style="{StaticResource CaptionStyle}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <TextBlock x:Name="RobotMetaText" Text="从左侧设备列表选择三轴或六轴机械臂" Style="{StaticResource CaptionStyle}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Border x:Name="ControlBadge" Background="#EEF2F7" CornerRadius="4" Padding="8,4">
+                                    <TextBlock x:Name="ControlBadgeText" Text="控制权：未连接" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}"/>
+                                </Border>
+                                <Border x:Name="MotionBadge" Background="#EEF2F7" CornerRadius="4" Padding="8,4" Margin="7,0,0,0">
+                                    <TextBlock x:Name="MotionBadgeText" Text="运动：Idle" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" x:Name="ProgressText" Text="0%" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </Grid>
+                        <ProgressBar x:Name="RobotProgress" Maximum="100" Value="0" Margin="0,7,0,0"/>
+
+                        <Border Background="#F8FAFD" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,13,0,0">
+                            <StackPanel>
+                                <TextBlock Text="关节目标（°）" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                                <ItemsControl x:Name="JointPanel">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="38"/>
+                                                    <ColumnDefinition Width="80"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="76"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding CurrentText}" FontSize="15" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="当前" Style="{StaticResource CaptionStyle}"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2" Margin="4,0,9,0" VerticalAlignment="Center">
+                                                    <Slider Value="{Binding Target, Mode=TwoWay}" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" IsEnabled="{Binding IsEditable}"/>
+                                                    <TextBlock Text="{Binding LimitText}" Style="{StaticResource CaptionStyle}" Margin="0,2,0,0"/>
+                                                </StackPanel>
+                                                <TextBox Grid.Column="3" Text="{Binding TargetText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                         IsEnabled="{Binding IsEditable}" HorizontalContentAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="38"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="58"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="速度" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <Slider Grid.Column="1" x:Name="SpeedSlider" Minimum="1" Maximum="100" Value="25" ValueChanged="SpeedSlider_ValueChanged" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" x:Name="SpeedText" Text="25%" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                </Grid>
+
+                                <WrapPanel Margin="0,12,0,0">
+                                    <Button x:Name="AcquireButton" Content="接管控制" Style="{StaticResource BaseButtonStyle}" Margin="0,0,7,7" Click="Acquire_Click" IsEnabled="False"/>
+                                    <Button x:Name="MoveButton" Content="运动到目标" Style="{StaticResource BaseButtonStyle}" Margin="0,0,7,7" Click="Move_Click" IsEnabled="False"/>
+                                    <Button x:Name="ZeroButton" Content="回零" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,7,7" Click="Zero_Click" IsEnabled="False"/>
+                                    <Button x:Name="StopButton" Content="停止" Style="{StaticResource DangerButtonStyle}" Margin="0,0,7,7" Click="Stop_Click" IsEnabled="False"/>
+                                    <Button x:Name="ReleaseButton" Content="释放控制" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,7,7" Click="Release_Click" IsEnabled="False"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock x:Name="RobotDetailsText" Style="{StaticResource CaptionStyle}" Margin="0,11,0,0"/>
+                        <TextBlock Text="TCP（机器人基坐标，mm / °）" FontWeight="SemiBold" Margin="0,9,0,2"/>
+                        <TextBlock x:Name="TcpText" Text="—" FontFamily="Consolas" FontSize="12"/>
+                        <Border Background="#FFF8E8" BorderBrush="#F3D59A" BorderThickness="1" CornerRadius="6" Padding="9" Margin="0,10,0,0">
+                            <TextBlock x:Name="BoundaryText" FontSize="12" Foreground="{StaticResource WarnBrush}"
+                                       Text="接管控制后 AxisLab 本地点动、场景编辑和保存会被锁定；释放控制、停止或断开连接后恢复。"/>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- 相机取图 -->
+            <Border Grid.Column="4" Style="{StaticResource CardStyle}">
+              <TabControl x:Name="VisionTabs" BorderThickness="0">
+               <TabItem Header="相机取图">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock Text="相机取图" Style="{StaticResource SectionTitleStyle}"/>
+                        <TextBlock x:Name="CameraTitleText" Text="未选择相机" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="CameraMetaText" Text="从左侧设备列表选择针孔相机" Style="{StaticResource CaptionStyle}" Margin="0,3,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+
+                        <Border Background="#0B1220" CornerRadius="8" Height="236" Margin="0,10,0,0">
+                            <Image x:Name="CameraImage" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+                        <TextBlock x:Name="CameraStatusText" Text="尚未拍照" Style="{StaticResource CaptionStyle}" Margin="0,8,0,0"/>
+
+                        <WrapPanel Margin="0,9,0,0">
+                            <Button x:Name="CaptureButton" Content="拍照并取图" Style="{StaticResource BaseButtonStyle}" Margin="0,0,7,7" Click="Capture_Click" IsEnabled="False"/>
+                            <Button x:Name="SaveButton" Content="保存 PNG/JSON" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,7,7" Click="SaveFrame_Click" IsEnabled="False"/>
+                            <Button x:Name="OpenFolderButton" Content="打开输出目录" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,7,7" Click="OpenFolder_Click"/>
+                        </WrapPanel>
+                        <CheckBox x:Name="AutoSaveCheckBox" Content="拍照后自动保存到 captures 目录" IsChecked="True" Margin="0,3,0,0"/>
+
+                        <TextBlock Text="帧信息" Style="{StaticResource CaptionStyle}" Margin="0,11,0,3"/>
+                        <TextBox x:Name="FrameInfoText" IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap"
+                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                 Height="168" FontFamily="Consolas" FontSize="11"/>
+                        <TextBlock Text="PNG 通过 HTTP 下载并校验 SHA-256；Modbus 只返回 frameToken。拍照需保持 AxisLab 渲染窗口打开。"
+                                   Style="{StaticResource CaptionStyle}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+               </TabItem>
+               <TabItem Header="VisionMaster">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel x:Name="VmSettingsPanel" Margin="0,10,0,0">
+                  <TextBlock Text="用户视觉方案" Style="{StaticResource SectionTitleStyle}"/>
+                  <TextBlock x:Name="VmStateText" Text="未加载方案" Margin="0,0,0,8" Foreground="{StaticResource MutedBrush}"/>
+                  <TextBlock Text=".sol 文件" Style="{StaticResource CaptionStyle}"/><TextBox x:Name="VmSolutionPath"/>
+                  <Button Content="选择方案…" Style="{StaticResource SecondaryButtonStyle}" Click="VmBrowse_Click" Margin="0,6,0,8"/>
+                  <TextBlock Text="方案密码（不保存）" Style="{StaticResource CaptionStyle}"/><PasswordBox x:Name="VmPassword" Padding="7"/>
+                  <TextBlock Text="流程名 / 图像源模块名" Style="{StaticResource CaptionStyle}" Margin="0,8,0,3"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="VmFlow" Text="定位流程" Margin="0,0,5,0"/><TextBox x:Name="VmSource" Text="图像源1" Grid.Column="1"/></Grid>
+                  <CheckBox x:Name="VmMono" Content="MONO8（默认 RGB24）" Margin="0,9,0,5"/>
+                  <Button x:Name="VmLoad" Content="加载 VM 方案" Style="{StaticResource BaseButtonStyle}" Click="VmLoad_Click" Margin="0,4,0,8"/>
+                  <TextBlock Text="请求编号输入 / 结果编号输出（整数）" Style="{StaticResource CaptionStyle}"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="VmRequestIn" Text="AxisLabRequestId" Margin="0,0,5,0"/><TextBox x:Name="VmRequestOut" Text="ResultRequestId" Grid.Column="1"/></Grid>
+                  <TextBlock Text="标定有效 / 目标有效（整数 0/1）" Style="{StaticResource CaptionStyle}" Margin="0,8,0,3"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="VmCalib" Text="CalibrationOk" Margin="0,0,5,0"/><TextBox x:Name="VmFound" Text="TargetOk" Grid.Column="1"/></Grid>
+                  <TextBlock Text="基坐标 X / Y / Rz 输出（浮点 mm / deg）" Style="{StaticResource CaptionStyle}" Margin="0,8,0,3"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="VmX" Text="RobotX" Margin="0,0,4,0"/><TextBox x:Name="VmY" Text="RobotY" Grid.Column="1" Margin="0,0,4,0"/><TextBox x:Name="VmRz" Text="RobotRz" Grid.Column="2"/></Grid>
+                  <Button x:Name="VmVerify" Content="将当前帧送入 VM 图像源自检" Style="{StaticResource SecondaryButtonStyle}" Click="VmVerify_Click" Margin="0,12,0,7"/>
+                  <Button x:Name="VmRun" Content="送图并运行用户视觉流程" Style="{StaticResource BaseButtonStyle}" Click="VmRun_Click"/>
+                  <TextBlock Text="先在相机页拍照。SDK 自检只验证图像输入；正式定位需要你的标定、识别和请求编号回传。" Style="{StaticResource CaptionStyle}" Margin="0,8,0,0"/>
+                </StackPanel></ScrollViewer>
+               </TabItem>
+               <TabItem Header="标定定位">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel x:Name="VisionPositionPanel" Margin="0,10,0,0">
+                  <TextBlock Text="固定相机平面定位" Style="{StaticResource SectionTitleStyle}"/>
+                  <TextBlock x:Name="VmResultText" Text="尚未取得本帧的有效 VM 结果" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                  <TextBlock Text="你的 VM 标定方案标识" Style="{StaticResource CaptionStyle}"/><TextBox x:Name="VmBindingLabel"/>
+                  <Button x:Name="VmBind" Content="绑定当前设备与标定方案" Style="{StaticResource SecondaryButtonStyle}" Click="VmBind_Click" Margin="0,6,0,7"/>
+                  <TextBlock x:Name="VmBindingText" Text="未绑定标定方案" Foreground="{StaticResource WarnBrush}"/>
+                  <TextBlock Text="目标 TCP 的 Z / Rx / Ry（mm / deg）" Style="{StaticResource CaptionStyle}" Margin="0,12,0,3"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="VmTargetZ" Text="400" Margin="0,0,4,0"/><TextBox x:Name="VmTargetRx" Text="0" Grid.Column="1" Margin="0,0,4,0"/><TextBox x:Name="VmTargetRy" Text="0" Grid.Column="2"/></Grid>
+                  <Button Content="读取当前 TCP 的 Z / Rx / Ry" Style="{StaticResource SecondaryButtonStyle}" Click="VmReadPose_Click" Margin="0,7,0,10"/>
+                  <TextBlock Text="速度使用中间机器人面板的倍率。X/Y/Rz 由 VM 生成。" Style="{StaticResource CaptionStyle}"/>
+                  <Button x:Name="VmPreview" Content="预检视觉目标" Style="{StaticResource SecondaryButtonStyle}" Click="VmPreview_Click" Margin="0,9,0,7"/>
+                  <Button x:Name="VmMove" Content="执行一次视觉定位" Style="{StaticResource BaseButtonStyle}" Click="VmMove_Click"/>
+                  <TextBlock Text="标定采样目录" Style="{StaticResource CaptionStyle}" Margin="0,16,0,3"/><TextBox x:Name="VmSampleDirectory"/>
+                  <Button x:Name="VmSaveSample" Content="保存当前图像＋曝光机器人姿态" Style="{StaticResource SecondaryButtonStyle}" Click="VmSaveSample_Click" Margin="0,6,0,7"/>
+                  <TextBlock Text="原图/完整帧 JSON 仍在相机页保存。标定样本另存 observation.json，不包含相机安装真值或内参真值。末端手眼和抓放为后续阶段。" Style="{StaticResource CaptionStyle}"/>
+                </StackPanel></ScrollViewer>
+               </TabItem>
+               <TabItem x:Name="SamplingTab" Header="九点采样">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel x:Name="SamplingPanel" Margin="0,10,0,0">
+                  <TextBlock Text="固定相机 · 九点平面标定" Style="{StaticResource SectionTitleStyle}"/>
+                  <TextBlock Text="使用六轴机器人和零偏移挂到 TCP 的标定圆点。先载入 nine-point-calibration.scene.json；中心和姿态可读取当前 TCP。" Style="{StaticResource CaptionStyle}"/>
+                  <Button Content="用当前 TCP 填写中心位姿" Style="{StaticResource SecondaryButtonStyle}" Click="SampleCurrent_Click" Margin="0,8,0,7"/>
+                  <TextBlock Text="中心 X / Y / Z（机器人基坐标，mm）" Style="{StaticResource CaptionStyle}"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="SampleX" Text="406" Margin="0,0,4,0"/><TextBox x:Name="SampleY" Text="0" Grid.Column="1" Margin="0,0,4,0"/><TextBox x:Name="SampleZ" Text="683" Grid.Column="2"/></Grid>
+                  <TextBlock Text="保持 Rx / Ry / Rz（deg）" Style="{StaticResource CaptionStyle}" Margin="0,8,0,3"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="SampleRx" Text="0" Margin="0,0,4,0"/><TextBox x:Name="SampleRy" Text="0" Grid.Column="1" Margin="0,0,4,0"/><TextBox x:Name="SampleRz" Text="0" Grid.Column="2"/></Grid>
+                  <TextBlock Text="九点间距（mm） / 验证误差门限（mm）" Style="{StaticResource CaptionStyle}" Margin="0,8,0,3"/>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="SampleSpacing" Text="20" Margin="0,0,4,0"/><TextBox x:Name="SampleTolerance" Text="0.5" Grid.Column="1"/></Grid>
+                  <Button Content="生成新计划：9 个标定点＋3 个验证点" Style="{StaticResource BaseButtonStyle}" Click="SampleGenerate_Click" Margin="0,9,0,7"/>
+                  <DataGrid x:Name="SamplingGrid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Height="264" FontSize="11" HorizontalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                      <DataGridTextColumn Header="#" Binding="{Binding Number}" IsReadOnly="True" Width="28"/>
+                      <DataGridTextColumn Header="用途" Binding="{Binding Role}" IsReadOnly="True" Width="40"/>
+                      <DataGridTextColumn Header="目标 X,Y,Z" Binding="{Binding Position}" IsReadOnly="True" Width="150"/>
+                      <DataGridTextColumn Header="像素 X" Binding="{Binding PixelX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" Width="64"/>
+                      <DataGridTextColumn Header="像素 Y" Binding="{Binding PixelY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True}" Width="64"/>
+                      <DataGridTextColumn Header="状态" Binding="{Binding State}" IsReadOnly="True" Width="120"/>
+                    </DataGrid.Columns>
+                  </DataGrid>
+                  <Button Content="预检并移动到所选点" Style="{StaticResource SecondaryButtonStyle}" Click="SampleMove_Click" Margin="0,8,0,7"/>
+                  <Button Content="采集所选点：图像＋曝光 TCP" Style="{StaticResource BaseButtonStyle}" Click="SampleCapture_Click"/>
+                  <Button Content="导出配对表 points.csv" Style="{StaticResource SecondaryButtonStyle}" Click="SampleExport_Click" Margin="0,7,0,7"/>
+                  <TextBlock Text="像素坐标由你在 VM 中测量后填入，可先留空导出图像与物理坐标。每行图像与 TCP 严格配对，禁止按检测排序猜配对。" Style="{StaticResource CaptionStyle}"/>
+                  <Button Content="记录所选验证点的当前 VM 结果" Style="{StaticResource SecondaryButtonStyle}" Click="SampleRecord_Click" Margin="0,10,0,7"/>
+                  <Button Content="生成独立验证误差报告" Style="{StaticResource SecondaryButtonStyle}" Click="SampleReport_Click"/>
+                  <TextBlock x:Name="SampleState" Text="尚未生成采样计划。图像输出目录沿用“标定定位”页的采样目录。" Style="{StaticResource CaptionStyle}" Margin="0,9,0,0"/>
+                </StackPanel></ScrollViewer>
+               </TabItem>
+              </TabControl>
+            </Border>
+        </Grid>
+
+        <!-- 日志 -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="16,12,16,0" Padding="11">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="运行日志" Style="{StaticResource CaptionStyle}" Margin="0,0,0,4"/>
+                <TextBox Grid.Row="1" x:Name="LogBox" IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap"
+                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                         FontFamily="Consolas" FontSize="11" BorderThickness="0" Background="Transparent"/>
+            </Grid>
+        </Border>
+
+        <!-- 状态栏 -->
+        <Border Grid.Row="3" Background="White" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="16,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusText" Text="就绪" Style="{StaticResource CaptionStyle}"/>
+                <TextBlock Grid.Column="1" x:Name="SessionText" Text="项目会话：—" Style="{StaticResource CaptionStyle}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+
+

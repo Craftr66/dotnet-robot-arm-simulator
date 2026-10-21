@@ -1,0 +1,436 @@
+{
+  "protocol": "AxisLab Modbus TCP v1",
+  "version": 1,
+  "unitId": 1,
+  "defaultPort": 1502,
+  "addressMode": "zero-based PDU",
+  "byteOrder": "big-endian",
+  "wordOrder": "high-word-first ABCD",
+  "functions": [
+    3,
+    6,
+    16
+  ],
+  "heartbeatMilliseconds": 5000,
+  "extension": 1,
+  "commands": {
+    "acquire": 1,
+    "release": 2,
+    "moveJ": 3,
+    "stop": 4,
+    "capture": 5,
+    "cancelCapture": 6,
+    "movePose": 7,
+    "moveL": 8,
+    "teachPoint": 9
+  },
+  "states": {
+    "idle": 0,
+    "accepted": 1,
+    "running": 2,
+    "completed": 3,
+    "failed": 4,
+    "cancelled": 5,
+    "rejected": 6
+  },
+  "deviceTypes": {
+    "robot6r": 1,
+    "robot3r": 2,
+    "camera": 10,
+    "box": 20
+  },
+  "errors": {
+    "None": 0,
+    "NoDevice": 1,
+    "SessionChanged": 2,
+    "ConfigurationChanged": 3,
+    "InvalidSequence": 4,
+    "SequenceConflict": 5,
+    "SequenceTooOld": 6,
+    "UnsupportedCommand": 7,
+    "InvalidParameters": 8,
+    "NotRobot": 9,
+    "NotCamera": 10,
+    "ControlBusy": 11,
+    "NoControl": 12,
+    "RobotBusy": 13,
+    "JointLimit": 14,
+    "InvalidJoints": 15,
+    "InvalidSpeed": 16,
+    "RendererUnavailable": 17,
+    "CameraBusy": 18,
+    "CaptureQueueFull": 19,
+    "CaptureTimeout": 20,
+    "RendererDisconnected": 21,
+    "SceneChanged": 22,
+    "CaptureCancelled": 23,
+    "MotionTooLong": 24,
+    "DeviceNotFound": 25,
+    "CaptureTooLarge": 26,
+    "RenderFailed": 27,
+    "InvalidPng": 28,
+    "CaptureNotFound": 29,
+    "IkUnreachable": 30,
+    "CollisionDetected": 31,
+    "SingularPath": 32,
+    "PlanningLimit": 33,
+    "StaleTeachPoint": 34,
+    "TeachPointNotFound": 35,
+    "InvalidPose": 36,
+    "InvalidFrame": 37,
+    "UnsupportedPose": 38,
+    "MountedRobotUnsupported": 39,
+    "ProgramActive": 40,
+    "InternalError": 255
+  },
+  "registers": [
+    {
+      "address": 0,
+      "count": 1,
+      "access": "R",
+      "name": "Magic 0x4158"
+    },
+    {
+      "address": 1,
+      "count": 1,
+      "access": "R",
+      "name": "Protocol version 1"
+    },
+    {
+      "address": 2,
+      "count": 1,
+      "access": "R",
+      "name": "Application 0x0006"
+    },
+    {
+      "address": 3,
+      "count": 1,
+      "access": "R",
+      "name": "Modbus listening flag"
+    },
+    {
+      "address": 4,
+      "count": 4,
+      "access": "R",
+      "name": "Project session token UInt64"
+    },
+    {
+      "address": 8,
+      "count": 2,
+      "access": "R",
+      "name": "Read snapshot sequence UInt32"
+    },
+    {
+      "address": 10,
+      "count": 1,
+      "access": "R",
+      "name": "Device count"
+    },
+    {
+      "address": 11,
+      "count": 1,
+      "access": "R",
+      "name": "Selected device number"
+    },
+    {
+      "address": 12,
+      "count": 1,
+      "access": "R",
+      "name": "Device type"
+    },
+    {
+      "address": 13,
+      "count": 1,
+      "access": "R",
+      "name": "Axis count"
+    },
+    {
+      "address": 14,
+      "count": 1,
+      "access": "R",
+      "name": "Control: 0 free, 1 this connection, 2 other connection"
+    },
+    {
+      "address": 15,
+      "count": 1,
+      "access": "R",
+      "name": "Latest submitted command state"
+    },
+    {
+      "address": 16,
+      "count": 1,
+      "access": "R",
+      "name": "Business error code"
+    },
+    {
+      "address": 17,
+      "count": 1,
+      "access": "R",
+      "name": "Selected device capabilities bitmask"
+    },
+    {
+      "address": 18,
+      "count": 2,
+      "access": "R",
+      "name": "Latest submitted sequence UInt32"
+    },
+    {
+      "address": 20,
+      "count": 2,
+      "access": "R",
+      "name": "Latest accepted sequence UInt32"
+    },
+    {
+      "address": 22,
+      "count": 2,
+      "access": "R",
+      "name": "Latest terminal sequence UInt32"
+    },
+    {
+      "address": 24,
+      "count": 2,
+      "access": "R",
+      "name": "Result frame token UInt32"
+    },
+    {
+      "address": 26,
+      "count": 2,
+      "access": "R",
+      "name": "Connection client ID UInt32"
+    },
+    {
+      "address": 28,
+      "count": 1,
+      "access": "R",
+      "name": "Heartbeat timeout seconds"
+    },
+    {
+      "address": 29,
+      "count": 1,
+      "access": "R",
+      "name": "Selected identity is valid in current project: 0/1"
+    },
+    {
+      "address": 30,
+      "count": 1,
+      "access": "R",
+      "name": "Actual Modbus port"
+    },
+    {
+      "address": 31,
+      "count": 1,
+      "access": "R",
+      "name": "Actual HTTP port"
+    },
+    {
+      "address": 32,
+      "count": 12,
+      "access": "R",
+      "name": "J1..J6 Float32; unused axes zero"
+    },
+    {
+      "address": 44,
+      "count": 12,
+      "access": "R",
+      "name": "TCP base XYZRxRyRz Float32"
+    },
+    {
+      "address": 56,
+      "count": 12,
+      "access": "R",
+      "name": "Flange base XYZRxRyRz Float32"
+    },
+    {
+      "address": 68,
+      "count": 12,
+      "access": "R",
+      "name": "TCP world XYZRxRyRz Float32"
+    },
+    {
+      "address": 80,
+      "count": 12,
+      "access": "R",
+      "name": "Device world XYZRxRyRz Float32"
+    },
+    {
+      "address": 92,
+      "count": 4,
+      "access": "R",
+      "name": "PoseId UInt64"
+    },
+    {
+      "address": 96,
+      "count": 1,
+      "access": "R",
+      "name": "Motion 0 idle,1 running,2 completed,3 cancelled,4 failed"
+    },
+    {
+      "address": 97,
+      "count": 1,
+      "access": "R",
+      "name": "Motion progress 0..1000"
+    },
+    {
+      "address": 98,
+      "count": 2,
+      "access": "R",
+      "name": "Configuration revision UInt32"
+    },
+    {
+      "address": 100,
+      "count": 8,
+      "access": "R",
+      "name": "Device UUID, 32 hex chars in eight UInt16 words"
+    },
+    {
+      "address": 108,
+      "count": 8,
+      "access": "R",
+      "name": "Camera fx/fy/cx/cy Float32"
+    },
+    {
+      "address": 116,
+      "count": 2,
+      "access": "R",
+      "name": "Camera width/height UInt16"
+    },
+    {
+      "address": 118,
+      "count": 1,
+      "access": "R",
+      "name": "Control heartbeat remaining milliseconds"
+    },
+    {
+      "address": 119,
+      "count": 1,
+      "access": "R",
+      "name": "Current step 1-based"
+    },
+    {
+      "address": 120,
+      "count": 1,
+      "access": "R",
+      "name": "Total steps"
+    },
+    {
+      "address": 121,
+      "count": 1,
+      "access": "R",
+      "name": "Motion kind 0 idle,1 MoveJ,2 MoveL"
+    },
+    {
+      "address": 122,
+      "count": 1,
+      "access": "R",
+      "name": "Motion error"
+    },
+    {
+      "address": 123,
+      "count": 1,
+      "access": "R",
+      "name": "v1 extension level 1"
+    },
+    {
+      "address": 124,
+      "count": 4,
+      "access": "R",
+      "name": "Reserved zero"
+    },
+    {
+      "address": 128,
+      "count": 64,
+      "access": "R",
+      "name": "Discovery page: 16 rows of number/type/axes/capabilities"
+    },
+    {
+      "address": 192,
+      "count": 8,
+      "access": "R",
+      "name": "Reserved zero"
+    },
+    {
+      "address": 200,
+      "count": 1,
+      "access": "RW",
+      "name": "Select stable device number; FC06 or FC16(count=1)"
+    },
+    {
+      "address": 201,
+      "count": 1,
+      "access": "RW",
+      "name": "Discovery page zero-based; FC06 or FC16(count=1)"
+    },
+    {
+      "address": 202,
+      "count": 1,
+      "access": "RW",
+      "name": "Staged opcode"
+    },
+    {
+      "address": 203,
+      "count": 1,
+      "access": "RW",
+      "name": "Opcode7/8: bit0 position-only, bits1..2 frame 0base/1world/2work; other opcodes zero"
+    },
+    {
+      "address": 204,
+      "count": 1,
+      "access": "RW",
+      "name": "Target joint count 3 or 6 for MoveJ"
+    },
+    {
+      "address": 205,
+      "count": 1,
+      "access": "RW",
+      "name": "Reserved zero"
+    },
+    {
+      "address": 206,
+      "count": 12,
+      "access": "RW",
+      "name": "Opcode3: J1..J6 Float32 unused axes zero; opcode7/8: XYZRxRyRz Float32"
+    },
+    {
+      "address": 218,
+      "count": 2,
+      "access": "RW",
+      "name": "Speed percent Float32"
+    },
+    {
+      "address": 220,
+      "count": 4,
+      "access": "RW",
+      "name": "Expected project session UInt64"
+    },
+    {
+      "address": 224,
+      "count": 2,
+      "access": "RW",
+      "name": "Expected configuration revision UInt32"
+    },
+    {
+      "address": 226,
+      "count": 1,
+      "access": "RW",
+      "name": "Opcode9 teach point number; otherwise zero"
+    },
+    {
+      "address": 227,
+      "count": 3,
+      "access": "RW",
+      "name": "Reserved zero"
+    },
+    {
+      "address": 230,
+      "count": 2,
+      "access": "RW",
+      "name": "Heartbeat UInt32; FC16 exact pair, must change"
+    },
+    {
+      "address": 232,
+      "count": 2,
+      "access": "W",
+      "name": "Submit sequence UInt32; FC16 exact pair, write last"
+    }
+  ]
+}

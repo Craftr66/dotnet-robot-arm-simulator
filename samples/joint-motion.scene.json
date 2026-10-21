@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "id": "fc3edb0f-3976-45a1-9ef9-c3c0ed5afe98",
+  "name": "六轴运动与末端相机",
+  "nextDeviceNumber": 6,
+  "devices": [
+    {
+      "id": "2d1e93a8-bc3e-488d-addb-11aa94f3e288",
+      "typeId": "camera.pinhole",
+      "name": "独立顶部相机",
+      "deviceNumber": 1,
+      "parentId": null,
+      "transform": {
+        "x": 420,
+        "y": -400,
+        "z": 700,
+        "rx": 145,
+        "ry": 0,
+        "rz": 35
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 2,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    },
+    {
+      "id": "d9067275-5917-4a7a-b58f-926752285195",
+      "typeId": "robot.generic6r",
+      "name": "六轴机械臂 1",
+      "deviceNumber": 2,
+      "parentId": null,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": {
+        "modelId": "axislab-6r-v1",
+        "jointPositions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "toolTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 80,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        }
+      }
+    },
+    {
+      "id": "655e9690-f6d6-4db4-aa10-b9374ee7362e",
+      "typeId": "camera.pinhole",
+      "name": "法兰随动相机",
+      "deviceNumber": 3,
+      "parentId": "d9067275-5917-4a7a-b58f-926752285195",
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 3,
+      "visible": true,
+      "attachmentFrameId": "flange",
+      "robot": null
+    },
+    {
+      "id": "5d0ec235-06b1-4982-b2e4-b06c82db6af9",
+      "typeId": "geometry.box",
+      "name": "长方体 1",
+      "deviceNumber": 4,
+      "parentId": null,
+      "transform": {
+        "x": 400,
+        "y": 200,
+        "z": 60,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    }
+  ]
+}

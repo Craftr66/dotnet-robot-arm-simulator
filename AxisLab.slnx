@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Core/AxisLab.Core.csproj" />
+    <Project Path="src/Host/AxisLab.Host.csproj" />
+    <Project Path="src/Desktop/AxisLab.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CoreChecks/AxisLab.CoreChecks.csproj" />
+    <Project Path="tests/CommunicationChecks/AxisLab.CommunicationChecks.csproj" />
+    <Project Path="tests/CalibrationChecks/AxisLab.CalibrationChecks.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/CSharpClient/AxisLab.CaptureClient.csproj" />
+    <Project Path="samples/ModbusClient/AxisLab.ModbusClient.csproj" />
+    <Project Path="samples/ProgramClient/AxisLab.ProgramClient.csproj" />
+  </Folder>
+</Solution>

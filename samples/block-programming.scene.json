@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 5,
+  "id": "1facd355-e1b8-4881-878a-45f14ec1e30c",
+  "name": "积木运动拍照练习",
+  "nextDeviceNumber": 3,
+  "devices": [
+    {
+      "id": "860e41d7-0f50-499d-9373-16995d1e5e8e",
+      "typeId": "robot.generic6r",
+      "name": "六轴机械臂 1",
+      "deviceNumber": 1,
+      "parentId": null,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": {
+        "modelId": "axislab-6r-v1",
+        "jointPositions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "toolTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 80,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        },
+        "geometry": {
+          "baseHeight": 135,
+          "shoulderHeight": 110,
+          "upperArm": 300,
+          "forearm": 280,
+          "wrist1": 80,
+          "wrist2": 70,
+          "flangeLength": 55,
+          "joint1Diameter": 110,
+          "joint2Diameter": 110,
+          "joint3Diameter": 110,
+          "joint4Diameter": 74,
+          "joint5Diameter": 74,
+          "joint6Diameter": 74
+        },
+        "workTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        }
+      }
+    },
+    {
+      "id": "e6efe0d1-c769-41b9-96e1-5f5253a37a93",
+      "typeId": "camera.pinhole",
+      "name": "针孔相机 1",
+      "deviceNumber": 2,
+      "parentId": null,
+      "transform": {
+        "x": 400,
+        "y": -400,
+        "z": 700,
+        "rx": 145,
+        "ry": 0,
+        "rz": 215
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    }
+  ],
+  "teachPoints": [],
+  "nextTeachPointNumber": 1,
+  "program": {
+    "version": 1,
+    "name": "运动拍照循环",
+    "workspace": {
+      "blocks": {
+        "languageVersion": 0,
+        "blocks": [
+          {
+            "type": "ax_start",
+            "id": "60b349da-8062-4a77-b2f2-13368c27e809",
+            "x": 25,
+            "y": 25,
+            "inputs": {
+              "BODY": {
+                "block": {
+                  "type": "ax_set",
+                  "id": "4e5f94af-3dca-48b1-9034-8ba7382835ba",
+                  "fields": {
+                    "NAME": "成功次数"
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "ax_number",
+                        "id": "1eb9b7e8-39c8-4f1d-80b6-e974b2a360f9",
+                        "fields": {
+                          "NUM": 0
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "ax_repeat",
+                      "id": "113f15fd-02db-4a0b-933f-0e0a5dc9f692",
+                      "inputs": {
+                        "COUNT": {
+                          "block": {
+                            "type": "ax_number",
+                            "id": "1e477a75-1c61-46db-b91e-2266d702b211",
+                            "fields": {
+                              "NUM": 3
+                            }
+                          }
+                        },
+                        "BODY": {
+                          "block": {
+                            "type": "ax_move_j",
+                            "id": "9697b7ec-cdd2-470f-b571-d689339b61e3",
+                            "fields": {
+                              "ROBOT": "860e41d7-0f50-499d-9373-16995d1e5e8e",
+                              "J1": 0,
+                              "J2": 0,
+                              "J3": 0,
+                              "J4": 0,
+                              "J5": 0,
+                              "J6": 0,
+                              "SPEED": 25,
+                              "TIMEOUT": 120
+                            },
+                            "next": {
+                              "block": {
+                                "type": "ax_capture",
+                                "id": "f5728998-90e0-4b3b-b5da-2b007a76ac98",
+                                "fields": {
+                                  "CAMERA": "e6efe0d1-c769-41b9-96e1-5f5253a37a93",
+                                  "CONTINUE": true,
+                                  "TIMEOUT": 15
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "ax_if",
+                                    "id": "38ebea49-3e19-48d7-97ce-df07ab95f5b4",
+                                    "inputs": {
+                                      "CONDITION": {
+                                        "block": {
+                                          "type": "ax_capture_ok",
+                                          "id": "738e5879-905c-434d-a44a-ec4da94c6a89"
+                                        }
+                                      },
+                                      "BODY": {
+                                        "block": {
+                                          "type": "ax_change",
+                                          "id": "e896b325-76d6-45a6-872c-de8ad463c756",
+                                          "fields": {
+                                            "NAME": "成功次数"
+                                          },
+                                          "inputs": {
+                                            "VALUE": {
+                                              "block": {
+                                                "type": "ax_number",
+                                                "id": "0c4ee931-a634-4834-a0b3-df85f4a04048",
+                                                "fields": {
+                                                  "NUM": 1
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "next": {
+                                            "block": {
+                                              "type": "ax_log",
+                                              "id": "7c719611-402d-424d-b1f3-a3608bf592aa",
+                                              "fields": {
+                                                "TEXT": "拍照完成，成功次数={成功次数}"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ELSE": {
+                                        "block": {
+                                          "type": "ax_log",
+                                          "id": "c670dd79-bc05-4a68-a8ba-733f1910d6e1",
+                                          "fields": {
+                                            "TEXT": "本次拍照失败，请检查相机与渲染状态。"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

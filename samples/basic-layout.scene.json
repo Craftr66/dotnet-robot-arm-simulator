@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "a820d2dd-0af6-40bf-8afb-84b8d7649282",
+  "name": "基础设备布局",
+  "nextDeviceNumber": 6,
+  "devices": [
+    {
+      "id": "3bbc4a78-a7d9-4719-9b78-13aaa434e179",
+      "typeId": "camera.pinhole",
+      "name": "独立顶部相机",
+      "deviceNumber": 1,
+      "parentId": null,
+      "transform": {
+        "x": 420,
+        "y": -400,
+        "z": 700,
+        "rx": 145,
+        "ry": 0,
+        "rz": 35
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 2,
+      "visible": true
+    },
+    {
+      "id": "c6f2a49d-bd97-46c7-bb35-1596c64a592d",
+      "typeId": "robot.generic6r",
+      "name": "六轴机械臂 1",
+      "deviceNumber": 2,
+      "parentId": null,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true
+    },
+    {
+      "id": "927ed8b4-5661-4d2a-a793-f02a32d950af",
+      "typeId": "camera.pinhole",
+      "name": "机器人基座挂载相机",
+      "deviceNumber": 3,
+      "parentId": "c6f2a49d-bd97-46c7-bb35-1596c64a592d",
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 600,
+        "rx": 145,
+        "ry": 0,
+        "rz": 35
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 2,
+      "visible": true
+    },
+    {
+      "id": "3239e16d-7e0d-4fdb-8d80-e7ad3df7bf59",
+      "typeId": "geometry.box",
+      "name": "长方体 1",
+      "deviceNumber": 4,
+      "parentId": null,
+      "transform": {
+        "x": 400,
+        "y": 200,
+        "z": 60,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true
+    }
+  ]
+}

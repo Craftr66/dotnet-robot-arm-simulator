@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 5,
+  "id": "7ff0d841-a3e7-4286-bfaa-4ef110aced20",
+  "name": "\u56FA\u5B9A\u76F8\u673A\u4E5D\u70B9\u6807\u5B9A\u7EC3\u4E60\uFF08\u516D\u8F74\uFF0BTCP\u5706\u70B9\uFF09",
+  "nextDeviceNumber": 4,
+  "devices": [
+    {
+      "id": "10549d23-4e85-49f0-aec4-28c3fde6141d",
+      "typeId": "robot.generic6r",
+      "name": "\u516D\u8F74\u673A\u68B0\u81C2 1",
+      "deviceNumber": 1,
+      "parentId": null,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": {
+        "modelId": "axislab-6r-v1",
+        "jointPositions": [
+          0,
+          10,
+          0,
+          0,
+          -100,
+          0
+        ],
+        "toolTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 80,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        },
+        "geometry": {
+          "baseHeight": 135,
+          "shoulderHeight": 110,
+          "upperArm": 300,
+          "forearm": 280,
+          "wrist1": 80,
+          "wrist2": 70,
+          "flangeLength": 55,
+          "joint1Diameter": 110,
+          "joint2Diameter": 110,
+          "joint3Diameter": 110,
+          "joint4Diameter": 74,
+          "joint5Diameter": 74,
+          "joint6Diameter": 74
+        },
+        "workTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        }
+      }
+    },
+    {
+      "id": "56c55914-0034-4c1d-90e2-02f5053bbb8b",
+      "typeId": "camera.pinhole",
+      "name": "\u56FA\u5B9A\u6807\u5B9A\u76F8\u673A",
+      "deviceNumber": 2,
+      "parentId": null,
+      "transform": {
+        "x": 406.62524438447406,
+        "y": 0,
+        "z": 1282.9289819435674,
+        "rx": 180,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 800,
+        "height": 600,
+        "fx": 900,
+        "fy": 900,
+        "cx": 400,
+        "cy": 300,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 2,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    },
+    {
+      "id": "e47c3d35-0936-4187-9706-809193dea90d",
+      "typeId": "calibration.marker",
+      "name": "TCP \u96F6\u504F\u79FB\u6807\u5B9A\u5706\u70B9",
+      "deviceNumber": 3,
+      "parentId": "10549d23-4e85-49f0-aec4-28c3fde6141d",
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 60,
+        "sizeY": 60,
+        "sizeZ": 2
+      },
+      "configurationRevision": 2,
+      "visible": true,
+      "attachmentFrameId": "tool",
+      "robot": null
+    }
+  ],
+  "teachPoints": [],
+  "nextTeachPointNumber": 1,
+  "program": {
+    "version": 1,
+    "name": "\u4E3B\u7A0B\u5E8F",
+    "workspace": {"blocks":{"languageVersion":0,"blocks":[]}}
+  }
+}

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net48</TargetFramework><LangVersion>latest</LangVersion><Nullable>disable</Nullable><AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http"/><Reference Include="System.Web.Extensions"/><Reference Include="System.Web"/>
+    <Compile Include="../../src/VisionDemo/Models.cs" Link="Models.cs"/>
+    <Compile Include="../../src/VisionDemo/AxisClient.cs" Link="AxisClient.cs"/>
+    <Compile Include="../../src/VisionDemo/RobotChannel.cs" Link="RobotChannel.cs"/>
+  </ItemGroup>
+</Project>

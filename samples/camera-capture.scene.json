@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 3,
+  "id": "33233dc3-0a70-4352-b067-86bc61a0470d",
+  "name": "双相机拍照与关节尺寸示例",
+  "nextDeviceNumber": 6,
+  "devices": [
+    {
+      "id": "f75127f1-8cd4-42ae-9b30-9105b92c85b6",
+      "typeId": "robot.generic6r",
+      "name": "可调尺寸六轴机械臂",
+      "deviceNumber": 1,
+      "parentId": null,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": {
+        "modelId": "axislab-6r-v1",
+        "jointPositions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "toolTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 80,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        },
+        "geometry": {
+          "baseHeight": 135,
+          "shoulderHeight": 110,
+          "upperArm": 300,
+          "forearm": 280,
+          "wrist1": 80,
+          "wrist2": 70,
+          "flangeLength": 55,
+          "joint1Diameter": 110,
+          "joint2Diameter": 110,
+          "joint3Diameter": 110,
+          "joint4Diameter": 74,
+          "joint5Diameter": 74,
+          "joint6Diameter": 74
+        }
+      }
+    },
+    {
+      "id": "50488496-9eb4-4a73-9d44-8806b21079a3",
+      "typeId": "camera.pinhole",
+      "name": "固定全景相机",
+      "deviceNumber": 2,
+      "parentId": null,
+      "transform": {
+        "x": 1150,
+        "y": -1050,
+        "z": 1100,
+        "rx": -119.49989230368453,
+        "ry": 3.1805546814635168e-15,
+        "rz": 36.95093829832549
+      },
+      "parameters": {
+        "width": 800,
+        "height": 600,
+        "fx": 650,
+        "fy": 650,
+        "cx": 400,
+        "cy": 300,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    },
+    {
+      "id": "3d9a5af6-f564-4dcb-8cbb-7831d03950e2",
+      "typeId": "camera.pinhole",
+      "name": "法兰工件观察相机",
+      "deviceNumber": 3,
+      "parentId": "f75127f1-8cd4-42ae-9b30-9105b92c85b6",
+      "transform": {
+        "x": 0,
+        "y": -100,
+        "z": 79.99999999999994,
+        "rx": -52.82840757780698,
+        "ry": -76.34958086524301,
+        "rz": -90
+      },
+      "parameters": {
+        "width": 800,
+        "height": 600,
+        "fx": 650,
+        "fy": 650,
+        "cx": 400,
+        "cy": 300,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "flange",
+      "robot": null
+    },
+    {
+      "id": "c0f1310f-d23a-4751-b68c-e1745be8f12f",
+      "typeId": "geometry.box",
+      "name": "工作台",
+      "deviceNumber": 4,
+      "parentId": null,
+      "transform": {
+        "x": 650,
+        "y": 250,
+        "z": 20,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 500,
+        "sizeY": 400,
+        "sizeZ": 40
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    },
+    {
+      "id": "659b7dc3-7c2a-463d-8fe4-f42b65f7230a",
+      "typeId": "geometry.box",
+      "name": "待观察工件",
+      "deviceNumber": 5,
+      "parentId": null,
+      "transform": {
+        "x": 650,
+        "y": 250,
+        "z": 70,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 100,
+        "sizeY": 70,
+        "sizeZ": 60
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    }
+  ]
+}

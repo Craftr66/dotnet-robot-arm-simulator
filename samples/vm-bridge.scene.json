@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 3,
+  "id": "14a2f0b1-bc28-46d3-8d6d-95fa871a3e9b",
+  "name": "VisionMaster 取图与联调底座",
+  "nextDeviceNumber": 7,
+  "devices": [
+    {
+      "id": "ef300a4f-be55-4669-b3cd-e67b055e0031",
+      "typeId": "robot.generic3r",
+      "name": "三轴机械臂 1",
+      "deviceNumber": 1,
+      "parentId": null,
+      "transform": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": {
+        "modelId": "axislab-3r-v1",
+        "jointPositions": [
+          15,
+          -15,
+          30
+        ],
+        "toolTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 80,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        },
+        "geometry": {
+          "baseHeight": 135,
+          "shoulderHeight": 110,
+          "upperArm": 300,
+          "forearm": 280,
+          "wrist1": 80,
+          "wrist2": 70,
+          "flangeLength": 55,
+          "joint1Diameter": 110,
+          "joint2Diameter": 110,
+          "joint3Diameter": 110,
+          "joint4Diameter": 74,
+          "joint5Diameter": 74,
+          "joint6Diameter": 74
+        }
+      }
+    },
+    {
+      "id": "9271eccf-8ba0-455d-8eec-832666e811ec",
+      "typeId": "robot.generic6r",
+      "name": "六轴机械臂 1",
+      "deviceNumber": 2,
+      "parentId": null,
+      "transform": {
+        "x": -1700,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": {
+        "modelId": "axislab-6r-v1",
+        "jointPositions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "toolTransform": {
+          "x": 0,
+          "y": 0,
+          "z": 80,
+          "rx": 0,
+          "ry": 0,
+          "rz": 0
+        },
+        "geometry": {
+          "baseHeight": 135,
+          "shoulderHeight": 110,
+          "upperArm": 300,
+          "forearm": 280,
+          "wrist1": 80,
+          "wrist2": 70,
+          "flangeLength": 55,
+          "joint1Diameter": 110,
+          "joint2Diameter": 110,
+          "joint3Diameter": 110,
+          "joint4Diameter": 74,
+          "joint5Diameter": 74,
+          "joint6Diameter": 74
+        }
+      }
+    },
+    {
+      "id": "367c7933-59a5-4a7a-a56e-5bc27b25bb2f",
+      "typeId": "camera.pinhole",
+      "name": "固定全景相机",
+      "deviceNumber": 3,
+      "parentId": null,
+      "transform": {
+        "x": 1150,
+        "y": -1050,
+        "z": 1100,
+        "rx": -119.49989230368453,
+        "ry": 3.1805546814635168E-15,
+        "rz": 36.95093829832549
+      },
+      "parameters": {
+        "width": 800,
+        "height": 600,
+        "fx": 650,
+        "fy": 650,
+        "cx": 400,
+        "cy": 300,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    },
+    {
+      "id": "580cbde0-d0a1-45f7-a261-ec4b365a1239",
+      "typeId": "camera.pinhole",
+      "name": "法兰工件观察相机",
+      "deviceNumber": 4,
+      "parentId": "ef300a4f-be55-4669-b3cd-e67b055e0031",
+      "transform": {
+        "x": 0,
+        "y": -100,
+        "z": 79.99999999999994,
+        "rx": -52.82840757780698,
+        "ry": -76.34958086524301,
+        "rz": -90
+      },
+      "parameters": {
+        "width": 800,
+        "height": 600,
+        "fx": 650,
+        "fy": 650,
+        "cx": 400,
+        "cy": 300,
+        "sizeX": 120,
+        "sizeY": 120,
+        "sizeZ": 120
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "flange",
+      "robot": null
+    },
+    {
+      "id": "42270735-7962-438e-a2e0-ae4f31075427",
+      "typeId": "geometry.box",
+      "name": "工作台",
+      "deviceNumber": 5,
+      "parentId": null,
+      "transform": {
+        "x": 650,
+        "y": 250,
+        "z": 20,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 500,
+        "sizeY": 400,
+        "sizeZ": 40
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    },
+    {
+      "id": "8bb584e8-4222-44db-84d5-447c7b5f57f2",
+      "typeId": "geometry.box",
+      "name": "待观察工件",
+      "deviceNumber": 6,
+      "parentId": null,
+      "transform": {
+        "x": 650,
+        "y": 250,
+        "z": 70,
+        "rx": 0,
+        "ry": 0,
+        "rz": 0
+      },
+      "parameters": {
+        "width": 640,
+        "height": 480,
+        "fx": 554.256,
+        "fy": 554.256,
+        "cx": 320,
+        "cy": 240,
+        "sizeX": 100,
+        "sizeY": 70,
+        "sizeZ": 60
+      },
+      "configurationRevision": 1,
+      "visible": true,
+      "attachmentFrameId": "base",
+      "robot": null
+    }
+  ]
+}

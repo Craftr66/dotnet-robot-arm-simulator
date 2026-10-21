@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>AxisLab</AssemblyName>
+    <Version>0.7.0</Version>
+    <Product>AxisLab</Product>
+    <Description>机械臂与视觉仿真平台</Description>
+    <ApplicationIcon>Assets/AxisLab.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Host/AxisLab.Host.csproj" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Resource Include="Assets/AxisLab.ico" />
+    <Content Include="../Host/wwwroot/**" Link="wwwroot/%(RecursiveDir)%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../samples/*.scene.json" Link="Samples/%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../samples/CSharpClient/*.cs;../../samples/CSharpClient/*.csproj;../../samples/CSharpClient/*.md"
+             Link="Samples/CSharpClient/%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../samples/ModbusClient/*.cs;../../samples/ModbusClient/*.csproj;../../samples/ModbusClient/*.md"
+             Link="Samples/ModbusClient/%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../samples/ProgramClient/*.cs;../../samples/ProgramClient/*.csproj;../../samples/ProgramClient/*.md"
+             Link="Samples/ProgramClient/%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

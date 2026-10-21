@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net48</TargetFramework><UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget><LangVersion>latest</LangVersion><Nullable>disable</Nullable>
+    <AssemblyName>AxisLab.VmBridge</AssemblyName><Version>1.2.0</Version>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <VmRoot Condition="'$(VmRoot)' == ''">C:\Program Files\VisionMaster4.3.0</VmRoot>
+    <VmAssembly>$(VmRoot)\Development\V4.x\ComControls\Assembly</VmAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../VmBridgeContracts.cs" Link="VmBridgeContracts.cs"/>
+    <Compile Include="../VmSdk/Models.cs;../VmSdk/VisionService.cs" Link="Sdk/%(Filename)%(Extension)"/>
+    <Reference Include="System.Web.Extensions"/><Reference Include="System.Web"/><Reference Include="System.Drawing"/>
+    <Reference Include="VM.Core"><HintPath>$(VmAssembly)\VM.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="VM.PlatformSDKCS"><HintPath>$(VmAssembly)\VM.PlatformSDKCS.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ImageSourceModuleCs"><HintPath>$(VmAssembly)\ImageSourceModuleCs.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="VMControls.RenderInterface"><HintPath>$(VmAssembly)\VMControls.RenderInterface.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="CheckVmSdk" BeforeTargets="ResolveAssemblyReferences"><Error Condition="!Exists('$(VmAssembly)\VM.Core.dll')" Text="找不到 VisionMaster SDK，请指定 -p:VmRoot=安装目录。"/></Target>
+</Project>

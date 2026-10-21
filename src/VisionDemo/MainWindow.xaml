@@ -1,0 +1,74 @@
+<Window x:Class="AxisLab.VisionDemo.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AxisLab Vision Demo · VisionMaster 图像与机器人联调" Width="1320" Height="880" MinWidth="1050" MinHeight="700" Background="#101923" Foreground="#E5EDF5" FontFamily="Microsoft YaHei UI" FontSize="13">
+  <Window.Resources>
+    <Style TargetType="TextBlock"><Setter Property="Margin" Value="0,4,0,6"/><Setter Property="TextWrapping" Value="Wrap"/></Style>
+    <Style TargetType="TextBox"><Setter Property="Padding" Value="7,5"/><Setter Property="Margin" Value="0,2,6,7"/><Setter Property="Background" Value="#F0F4F8"/><Setter Property="Foreground" Value="#14212E"/><Setter Property="BorderBrush" Value="#506273"/></Style>
+    <Style TargetType="PasswordBox"><Setter Property="Padding" Value="7,5"/><Setter Property="Margin" Value="0,2,6,7"/></Style>
+    <Style TargetType="ComboBox"><Setter Property="Padding" Value="7,5"/><Setter Property="Margin" Value="0,2,6,7"/><Setter Property="Foreground" Value="#14212E"/></Style>
+    <Style TargetType="Button"><Setter Property="Padding" Value="12,7"/><Setter Property="Margin" Value="0,3,7,7"/><Setter Property="Background" Value="#D9E8F2"/><Setter Property="Foreground" Value="#14212E"/><Setter Property="BorderThickness" Value="0"/></Style>
+    <Style TargetType="GroupBox"><Setter Property="Padding" Value="12"/><Setter Property="Margin" Value="0,0,12,12"/><Setter Property="Foreground" Value="#DCE8F2"/><Setter Property="BorderBrush" Value="#344657"/></Style>
+  </Window.Resources>
+  <DockPanel Margin="18">
+    <Grid DockPanel.Dock="Top" Margin="0,0,0,12">
+      <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+      <StackPanel><TextBlock Text="AxisLab × VisionMaster" FontSize="25" FontWeight="SemiBold" Foreground="#6DE0C0"/><TextBlock Text="虚拟设备提供图像与姿态 · 用户 VM 流程提供标定与定位 · WPF 完成联调" Foreground="#A6B8CA"/></StackPanel>
+      <Button x:Name="StopButton" Grid.Column="1" Content="停止机器人 / 取消任务" Click="StopClick" Background="#F3AD9D" VerticalAlignment="Center"/>
+    </Grid>
+    <TextBlock x:Name="Status" DockPanel.Dock="Bottom" Text="先连接 AxisLab，再拍照；VM 方案可按需加载。" Foreground="#6DE0C0" Margin="0,8,0,0"/>
+    <Grid x:Name="Body">
+      <Grid.ColumnDefinitions><ColumnDefinition Width="410"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+      <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0">
+        <StackPanel>
+          <GroupBox Header="01 / AxisLab 连接与设备">
+            <StackPanel><TextBlock Text="HTTP 地址（从 AxisLab 的外部连接复制）"/><TextBox x:Name="Address" Text="http://127.0.0.1:5080"/>
+              <Button Content="连接 / 刷新设备" Click="ConnectClick" Background="#6DE0C0"/>
+              <TextBlock Text="虚拟相机"/><ComboBox x:Name="Cameras" SelectionChanged="DeviceChanged"/>
+              <TextBlock Text="机器人"/><ComboBox x:Name="Robots" SelectionChanged="DeviceChanged"/>
+              <WrapPanel><Button Content="拍照" Click="CaptureClick"/><Button Content="读取当前 TCP 姿态" Click="ReadPoseClick"/></WrapPanel>
+              <TextBlock Text="样本保存目录（PNG＋曝光时机器人姿态）"/><TextBox x:Name="DatasetDirectory"/>
+              <Button Content="保存当前配对样本" Click="SaveFrameClick"/>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Header="02 / 你的 VisionMaster 方案">
+            <StackPanel><TextBlock Text=".sol 方案文件"/><TextBox x:Name="SolutionPath"/><Button Content="选择方案…" Click="BrowseClick"/>
+              <TextBlock Text="方案密码（不保存）"/><PasswordBox x:Name="SolutionPassword"/>
+              <TextBlock Text="流程名 / 图像源模块名"/>
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="FlowName" Text="定位流程"/><TextBox x:Name="SourceName" Grid.Column="1" Text="图像源1"/></Grid>
+              <CheckBox x:Name="Mono" Content="送入 MONO8（默认 RGB24）" Margin="0,4,0,9" Foreground="#DCE8F2"/>
+              <WrapPanel><Button Content="加载方案" Click="LoadVmClick"/><Button Content="图像源送图自检" Click="VerifyVmClick"/></WrapPanel>
+              <TextBlock Text="流程输出字段（整数标志＋浮点基坐标）"/>
+              <TextBlock Text="请求编号输入 / 结果编号输出（整数回传）" Foreground="#A6B8CA"/>
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="RequestInput" Text="AxisLabRequestId"/><TextBox x:Name="RequestOutput" Grid.Column="1" Text="ResultRequestId"/></Grid>
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="CalibOutput" Text="CalibrationOk" ToolTip="整数 0/1"/><TextBox x:Name="FoundOutput" Grid.Column="1" Text="TargetOk" ToolTip="整数 0/1"/></Grid>
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="XOutput" Text="RobotX"/><TextBox x:Name="YOutput" Grid.Column="1" Text="RobotY"/><TextBox x:Name="RzOutput" Grid.Column="2" Text="RobotRz"/></Grid>
+              <Button Content="将本帧送入 VM 并运行流程" Click="RunVmClick" Background="#6DE0C0"/>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Header="03 / 固定相机平面定位">
+            <StackPanel><TextBlock Text="你已完成的 VM 标定方案标识"/><TextBox x:Name="CalibrationLabel" ToolTip="用于追溯用户方案，Demo 不会自动计算标定"/>
+              <Button Content="绑定当前设备与 VM 标定方案" Click="BindClick"/>
+              <TextBlock Text="目标 Z / Rx / Ry（mm / deg）"/>
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions><TextBox x:Name="TargetZ" Text="400"/><TextBox x:Name="TargetRx" Text="0" Grid.Column="1"/><TextBox x:Name="TargetRy" Text="0" Grid.Column="2"/></Grid>
+              <TextBlock Text="速度倍率 %"/><TextBox x:Name="Speed" Text="25"/>
+              <WrapPanel><Button Content="预检 VM 目标" Click="PreviewClick"/><Button Content="执行一次定位" Click="MoveClick" Background="#6DE0C0"/></WrapPanel>
+              <TextBlock Text="首版运动采用基坐标、MoveJ 和已知目标平面。X/Y/Rz 必须由 VM 输出；末端相机手眼和自动抓放按后续里程碑开发。" Foreground="#A6B8CA"/>
+            </StackPanel>
+          </GroupBox>
+        </StackPanel>
+      </ScrollViewer>
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="190"/></Grid.RowDefinitions>
+        <Border BorderBrush="#344657" BorderThickness="1" Background="#182532" Margin="0,0,0,12" Padding="12"><Grid>
+          <TextBlock x:Name="ImageHint" Text="AxisLab 原始图像&#x0a;拍照后会显示同一 FrameId 的 PNG" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#A6B8CA" TextAlignment="Center"/>
+          <Image x:Name="PreviewImage" Stretch="Uniform"/>
+        </Grid></Border>
+        <Border Grid.Row="1" BorderBrush="#344657" BorderThickness="1" Padding="12" Margin="0,0,0,12"><StackPanel>
+          <TextBlock x:Name="FrameSummary" Text="尚未采集图像" Foreground="#A6B8CA"/>
+          <TextBlock x:Name="ResultSummary" Text="VM 尚未输出定位结果" FontSize="16" Foreground="#6DE0C0"/>
+          <TextBlock x:Name="BindingSummary" Text="未绑定用户标定方案" Foreground="#E9BF75"/>
+        </StackPanel></Border>
+        <GroupBox Grid.Row="2" Header="执行日志" Margin="0"><ListBox x:Name="Logs" Background="#101923" Foreground="#B8CADB" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontFamily="Consolas,Microsoft YaHei UI" FontSize="12"/></GroupBox>
+      </Grid>
+    </Grid>
+  </DockPanel>
+</Window>

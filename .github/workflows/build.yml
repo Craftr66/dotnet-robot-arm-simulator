@@ -1,0 +1,38 @@
+name: Build and core checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run build
+      - run: dotnet run --project tests/CoreChecks/AxisLab.CoreChecks.csproj -c Release
+      - run: dotnet run --project tests/CommunicationChecks/AxisLab.CommunicationChecks.csproj -c Release
+      - run: dotnet run --project tests/CalibrationChecks/AxisLab.CalibrationChecks.csproj -c Release
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build
+      - run: dotnet build AxisLab.slnx -c Release
+      - run: dotnet build src/WpfDemo/AxisLab.WpfDemo.csproj -c Release
+      # The proprietary VM worker is built locally on a machine with the licensed VM SDK.
